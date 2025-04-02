@@ -1,0 +1,7 @@
+django>=5.0,<5.2
+django-extensions
+djangorestframework
+pillow
+pip
+psycopg2
+python-dotenv
