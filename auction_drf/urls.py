@@ -17,10 +17,15 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.urlpatterns import format_suffix_patterns
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("core/", include('core.urls')),
-    path("accounts/", include('allauth.urls')),
+    # Authentication endpoints (Registration, Login, Logout)
+    # path('api/auth/', include('dj_rest_auth.urls')),
+    # path('api/auth/registration/', include('dj_rest_auth.registration.urls')),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html'])
