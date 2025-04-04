@@ -172,7 +172,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # JWT Settings
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),  # Short expiration
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),  # Short expiration
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # Longer refresh
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
