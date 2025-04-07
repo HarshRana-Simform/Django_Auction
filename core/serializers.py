@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-from .models import Item
+from .models import Item, Bid
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -41,3 +42,47 @@ class ItemSerializer(serializers.ModelSerializer):
                   "current_bid", "start_time", "end_time", "seller"]
         # As it will be filled directly depending on the user.
         read_only_fields = ["seller"]
+
+    def validate_starting_bid(self, value):
+
+        if value <= 0:
+            raise serializers.ValidationError(
+                "The starting bid must be greater than 0.")
+        return value
+
+    def validate_start_time(self, value):
+
+        if value <= timezone.now():
+            raise serializers.ValidationError(
+                "The start time cannot be in the past.")
+        return value
+
+    def validate(self, data):
+
+        if data["end_time"] <= data["start_time"]:
+            raise serializers.ValidationError(
+                "The end time cannot be before the start time.")
+        return data
+
+
+class BidSerializer(serializers.ModelSerializer):
+
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = Bid
+        fields = ["user", "item", "bid_amount", "timestamp"]
+        read_only_fields = ["user", "timestamp"]
+
+    def validate(self, data):
+        item = data["item"]
+
+        if item.end_time < timezone.now():
+            raise serializers.ValidationError("The auction has already ended.")
+        if timezone.now() < item.start_time:
+            raise serializers.ValidationError(
+                f"The auction has not started yet: Start date and time:{item.start_time}.")
+        if data["bid_amount"] < item.current_bid:
+            raise serializers.ValidationError(
+                "Your bid amount must be greater than the current bid.")
+        return data

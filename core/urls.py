@@ -13,8 +13,11 @@ urlpatterns = [
     path('api/user_detail/', views.UserDetailsView.as_view(), name='user_detail'),
     path('api/create_item/', views.CreateItemView.as_view(), name='create_item'),
     path('api/list_items/', views.ListItemView.as_view(), name='list_items'),
-    path('api/update_item/<int:id>',
+    path('api/update_item/<int:id>/',
          views.UpdateItemView.as_view(), name='update_item'),
-    path('api/delete_item/<int:id>',
+    path('api/delete_item/<int:id>/',
          views.DeleteItemView.as_view(), name='delete_item'),
+    path('api/create_bid/', views.CreateBidView.as_view(), name='create_bid'),
+    path('api/bid_history/<int:item_id>/',
+         views.ListBidHistoryView.as_view(), name='bid_history'),
 ]

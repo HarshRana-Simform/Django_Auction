@@ -5,11 +5,11 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
-from .serializers import UserRegistrationSerializer, ItemSerializer
+from .serializers import UserRegistrationSerializer, ItemSerializer, BidSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import generics, mixins
 from .permissions import IsAdmin, IsBuyer, IsSeller
-from .models import Item
+from .models import Item, Bid
 from rest_framework.exceptions import PermissionDenied
 # Create your views here.
 
@@ -141,3 +141,30 @@ class DeleteItemView(generics.RetrieveDestroyAPIView):
         else:
             raise PermissionDenied(
                 "You are not owner of this item listing or don't have sufficient permissions.")
+
+
+class CreateBidView(mixins.RetrieveModelMixin,
+                    mixins.CreateModelMixin,
+                    generics.GenericAPIView):
+    queryset = Bid.objects.all()
+    serializer_class = BidSerializer
+    # permission_classes = [IsBuyer]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class ListBidHistoryView(mixins.ListModelMixin,
+                         generics.GenericAPIView):
+
+    serializer_class = BidSerializer
+
+    def get_queryset(self):
+        item_id = self.kwargs.get("item_id")
+        return Bid.objects.filter(item_id=item_id)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
