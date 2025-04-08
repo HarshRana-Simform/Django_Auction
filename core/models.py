@@ -25,6 +25,11 @@ class User(AbstractUser):
 
 class Item(models.Model):
 
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('closed', 'Closed'),
+    ]
+
     seller = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='items')
     name = models.CharField(max_length=250)
@@ -35,6 +40,10 @@ class Item(models.Model):
         max_digits=10, decimal_places=2, default=0.00)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES, default='closed')
+    winner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, related_name='won_items')
 
     def __str__(self):
         return self.name

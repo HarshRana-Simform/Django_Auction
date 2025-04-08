@@ -44,10 +44,13 @@ class UserRegistrationView(mixins.CreateModelMixin, generics.GenericAPIView):
 
 
 class ProtectedView(APIView):
-    permission_classes = [IsSeller]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({"message": f"{request.user} have access as your role is {request.user.role}"})
+        item = Item.objects.get(id=8)
+        winning_bid = item.bids.order_by('-bid_amount').first()
+        print(winning_bid)
+        return Response({"message": "Hello"})
 
 
 class UserDetailsView(APIView):
