@@ -78,11 +78,13 @@ class BidSerializer(serializers.ModelSerializer):
         item = data["item"]
 
         if item.end_time < timezone.now():
-            raise serializers.ValidationError("The auction has already ended.")
+            raise serializers.ValidationError(
+                "The auction has already ended.")
         if timezone.now() < item.start_time:
             raise serializers.ValidationError(
                 f"The auction has not started yet: Start date and time:{item.start_time}.")
-        if data["bid_amount"] < item.current_bid:
+        if data["bid_amount"] <= item.current_bid:
             raise serializers.ValidationError(
                 "Your bid amount must be greater than the current bid.")
-        return data
+        if item.status == 'active':
+            return data

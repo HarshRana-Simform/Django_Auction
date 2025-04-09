@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.sites',
+    "django.contrib.sites",
     "allauth",
     "allauth.account",
     # "allauth.socialaccount",
@@ -47,8 +47,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "rest_framework",
-    'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
+    "django_celery_beat",
     # 'dj_rest_auth',
     "core",
 ]
@@ -69,7 +70,7 @@ ROOT_URLCONF = "auction_drf.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -185,8 +186,13 @@ SIMPLE_JWT = {
 SITE_ID = 1
 
 
-# Email Backend (for password reset)
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Email Backend
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'hcrana2003.cr@gmail.com'
+EMAIL_HOST_PASSWORD = 'snvgkmrjpjpayexl'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # ACCOUNT_EMAIL_REQUIRED = True
 # ACCOUNT_AUTHENTICATION_METHOD = "email"

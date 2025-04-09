@@ -20,4 +20,5 @@ urlpatterns = [
     path('api/create_bid/', views.CreateBidView.as_view(), name='create_bid'),
     path('api/bid_history/<int:item_id>/',
          views.ListBidHistoryView.as_view(), name='bid_history'),
+    path('api/send_mail/', views.SendEmailView.as_view(), name='send_mail'),
 ]

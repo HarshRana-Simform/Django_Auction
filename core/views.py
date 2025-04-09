@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -11,6 +12,8 @@ from rest_framework import generics, mixins
 from .permissions import IsAdmin, IsBuyer, IsSeller
 from .models import Item, Bid
 from rest_framework.exceptions import PermissionDenied
+from django.core.mail import EmailMessage
+from django.utils import timezone
 # Create your views here.
 
 User = get_user_model()
@@ -44,12 +47,20 @@ class UserRegistrationView(mixins.CreateModelMixin, generics.GenericAPIView):
 
 
 class ProtectedView(APIView):
-    # permission_classes = [IsAuthenticated]
+    """
+    A view to test with different stuff.
+    """
+    # permission_classes = [IsSeller]
 
     def get(self, request):
         item = Item.objects.get(id=8)
-        winning_bid = item.bids.order_by('-bid_amount').first()
-        print(winning_bid)
+        # winning_bid = item.bids.order_by('-bid_amount').first()
+        # print(winning_bid)
+        current_time = timezone.now()
+        upcoming_auctions = Item.objects.filter(start_time__gte=current_time)
+        print(upcoming_auctions)
+        print(self.request.user)
+        print(request.headers)
         return Response({"message": "Hello"})
 
 
@@ -151,7 +162,7 @@ class CreateBidView(mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     queryset = Bid.objects.all()
     serializer_class = BidSerializer
-    # permission_classes = [IsBuyer]
+    permission_classes = [IsBuyer]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -164,6 +175,7 @@ class ListBidHistoryView(mixins.ListModelMixin,
                          generics.GenericAPIView):
 
     serializer_class = BidSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         item_id = self.kwargs.get("item_id")
@@ -171,3 +183,18 @@ class ListBidHistoryView(mixins.ListModelMixin,
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class SendEmailView(APIView):
+
+    def post(self, request):
+        email = request.data['to']
+
+        emailm = EmailMessage(
+            'Testing mail',
+            'This is the body of the mail',
+            settings.EMAIL_HOST_USER,
+            [email]
+        )
+        emailm.send(fail_silently=False)
+        return Response({"message": "Email sent successfully!!"}, status=status.HTTP_200_OK)
