@@ -17,17 +17,20 @@ def schedule_auction_tasks(sender, instance, created, **kwargs):
 
         # Scheduling the open task
         delay_open = instance.start_time
-        open_auction.apply_async(args=[instance.id], eta=delay_open)
+        open_auction.apply_async(
+            args=[instance.id], eta=delay_open)
 
         # Scheduling the close task
         delay_close = instance.end_time
         close_auction.apply_async(args=[instance.id], eta=delay_close)
 
         delay_start_mail = instance.start_time - timedelta(minutes=5)
-        send_start_mail.apply_async(args=[instance.id], eta=delay_start_mail)
+        send_start_mail.apply_async(
+            args=[instance.id], eta=delay_start_mail)
 
         delay_end_mail = instance.end_time + timedelta(minutes=1)
-        send_end_mail.apply_async(args=[instance.id], eta=delay_end_mail)
+        send_end_mail.apply_async(
+            args=[instance.id], eta=delay_end_mail)
 
 
 @receiver(post_save, sender=Bid)

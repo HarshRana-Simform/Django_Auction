@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+Auctions List
+{% endblock title %}
+
+{% block content %}
+<h1 class="d-flex justify-content-center mt-3">Auctions</h1>
+
+  <div class="container d-flex-column justify-content-center align-items-center">
+  {% comment %} <a href="{% url 'add_post' %}">
+    <button type="button" class="btn btn-primary" >Add Post</button>
+  </a> {% endcomment %}
+  {% if auctions %}
+      <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Description</th>
+              <th scope="col">Starting bid</th>
+              <th scope="col">Current bid</th>
+              <th scope="col">Start Time</th>
+              <th scope="col">End Time</th>
+              <th scope="col">Status</th>
+              {% comment %} <th scope="col" class="text-center">Actions</th> {% endcomment %}
+            </tr>
+          </thead>
+        {% for auction in auctions%}
+          <tbody>
+            <tr>
+              <td>{{auction.id}}</td>
+
+              <td>
+                {% comment %} <a href={% url "post" blog.slug %}> {% endcomment %}
+                  {{auction.name|title}}
+                </a>
+              </td>
+
+              <td>{{auction.description|truncatewords:5}}</td>
+              <td>{{auction.starting_bid}}</td>
+              <td>{{auction.current_bid}}</td>
+              <td>{{auction.start_time}}</td>
+              <td>{{auction.end_time}}</td>
+              {% if auction.status == 'closed' %}
+              <td><p class="btn btn-danger"  >{{auction.status|capfirst}}</p></td>
+              {% else %}
+              <td><p class="btn btn-success"  >{{auction.status|capfirst}}</p></td>
+              {% endif %}
+
+
+              {% comment %} <td class="text-center">
+                {% if request.user == blog.author or user|has_group:"moderator" or user.is_staff %}
+                <a href="{% url 'update' blog.id  %}"><button type="button" class="btn btn-info">Update</button></a>
+                <a href="{% url 'delete' blog.id  %}"><button type="button" class="btn btn-danger">Delete</button></a>
+                {% if user.is_staff %}
+                <a href="{% url 'ban_user' blog.author.id %}"><button type="button" class="btn btn-warning">Ban User</button></a>
+                {% endif %}
+                {% else %}
+                Not the Author.
+                {% endif %}
+              </td> {% endcomment %}
+            </tr>
+        {% endfor %}
+        </table>
+
+  {% else %}
+    <div>
+      <h1>No Auctions Available!</h1>
+    </div>
+  {% endif %}
+  </div>
+{% endblock content %}

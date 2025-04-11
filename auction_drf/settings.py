@@ -52,9 +52,11 @@ INSTALLED_APPS = [
     "django_celery_beat",
     # 'dj_rest_auth',
     "core",
+    "frontend",
 ]
 
 MIDDLEWARE = [
+    "core.custom_middleware.MaintenanceModeMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -63,6 +65,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+
 ]
 
 ROOT_URLCONF = "auction_drf.urls"
@@ -190,8 +193,8 @@ SITE_ID = 1
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'hcrana2003.cr@gmail.com'
-EMAIL_HOST_PASSWORD = 'snvgkmrjpjpayexl'
+EMAIL_HOST_USER = os.getenv('TEST_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('TEST_EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # ACCOUNT_EMAIL_REQUIRED = True
@@ -204,3 +207,15 @@ CELERY_TIMEZONE = 'Asia/Kolkata'
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '1000/day',
+        'user': '2000/day'
+    }
+}

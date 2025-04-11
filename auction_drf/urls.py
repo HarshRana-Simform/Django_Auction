@@ -23,6 +23,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("core/", include('core.urls')),
+    path("frontend/", include('frontend.urls')),
     # Authentication endpoints (Registration, Login, Logout)
     # path('api/auth/', include('dj_rest_auth.urls')),
     # path('api/auth/registration/', include('dj_rest_auth.registration.urls')),

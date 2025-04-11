@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
-from .serializers import UserRegistrationSerializer, ItemSerializer, BidSerializer
+from .serializers import UserRegistrationSerializer, ItemSerializer, BidSerializer, ListItemSerializer
 from django.contrib.auth import get_user_model
 from rest_framework import generics, mixins
 from .permissions import IsAdmin, IsBuyer, IsSeller
@@ -14,6 +14,8 @@ from .models import Item, Bid
 from rest_framework.exceptions import PermissionDenied
 from django.core.mail import EmailMessage
 from django.utils import timezone
+from datetime import timedelta
+from rest_framework.throttling import UserRateThrottle
 # Create your views here.
 
 User = get_user_model()
@@ -53,14 +55,15 @@ class ProtectedView(APIView):
     # permission_classes = [IsSeller]
 
     def get(self, request):
-        item = Item.objects.get(id=8)
+        item = Item.objects.get(id=21)
         # winning_bid = item.bids.order_by('-bid_amount').first()
         # print(winning_bid)
-        current_time = timezone.now()
-        upcoming_auctions = Item.objects.filter(start_time__gte=current_time)
-        print(upcoming_auctions)
-        print(self.request.user)
-        print(request.headers)
+        # current_time = timezone.now()
+        # upcoming_auctions = Item.objects.filter(start_time__gte=current_time)
+        # print(upcoming_auctions)
+        # print(self.request.user)
+        # print(request.headers)
+        print((item.end_time - item.start_time) - timedelta(minutes=3))
         return Response({"message": "Hello"})
 
 
@@ -109,8 +112,8 @@ class CreateItemView(mixins.CreateModelMixin,
 class ListItemView(mixins.ListModelMixin,
                    generics.GenericAPIView):
     queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-    permission_classes = [IsSeller | IsBuyer]
+    serializer_class = ListItemSerializer
+    # permission_classes = [IsSeller | IsBuyer]
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -163,6 +166,7 @@ class CreateBidView(mixins.RetrieveModelMixin,
     queryset = Bid.objects.all()
     serializer_class = BidSerializer
     permission_classes = [IsBuyer]
+    throttle_classes = [UserRateThrottle]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

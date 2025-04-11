@@ -66,7 +66,7 @@ def send_start_mail(item_id):
 
         emailm = EmailMessage(
             f'Reminder: Acution for {item.name}',
-            f'This is a reminder email to inform you that the auction for the item {item.name} is going to start at {item.start_time.isoformat()}. Get ready to bid !!!',
+            f'This is a reminder email to inform you that the auction for the item {item.name} is going to start at {item.start_time}. Get ready to bid !!!',
             settings.EMAIL_HOST_USER,
             user_emails
         )
@@ -93,7 +93,7 @@ def send_end_mail(item_id):
         print(user_emails)
 
         emailm = EmailMessage(
-            f'Closing: Acution for {item.name}',
+            f'Closing: Auction for {item.name}',
             f'The auction for the item {item.name} has ended. Winner: {item.winner.username if item.winner else "No bids placed"}. Thank you for participating in it.',
             settings.EMAIL_HOST_USER,
             user_emails
@@ -127,6 +127,8 @@ def send_upcoming_auctions_emails():
             )
             emailm.send(fail_silently=False)
             return "Emails sent successfully!!"
+        else:
+            return "There are no new upcoming events to send mail about."
 
     except Exception as e:
         print(f"Some error occured: {e}")

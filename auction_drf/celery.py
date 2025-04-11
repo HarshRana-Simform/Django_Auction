@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
 from celery.schedules import crontab
+from datetime import datetime, timedelta
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'auction_drf.settings')
 
@@ -21,5 +22,10 @@ app.conf.beat_schedule = {
         'task': 'core.tasks.send_upcoming_auctions_emails',
         # Sends email at 10 am every-day.
         'schedule': crontab(hour=10, minute=00),
+        'options': {
+            # If the email in not send within an hour of that day that task expires
+            # to avoid backlog mails getting send with outdated data.
+            'expire_seconds': 3600
+        }
     },
 }
