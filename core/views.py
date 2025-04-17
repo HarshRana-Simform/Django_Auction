@@ -16,6 +16,7 @@ from django.core.mail import EmailMessage
 from django.utils import timezone
 from datetime import timedelta
 from rest_framework.throttling import UserRateThrottle
+from rest_framework import filters
 # Create your views here.
 
 User = get_user_model()
@@ -71,6 +72,7 @@ class UserDetailsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        print(self.request.user)
         return Response({"User": f"{request.user}",
                         "Role": f"{request.user.role}"})
 
@@ -98,6 +100,7 @@ class LogoutView(APIView):
 
 class CreateItemView(mixins.CreateModelMixin,
                      generics.GenericAPIView):
+    throttle_scope = 'item'
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = [IsSeller]
@@ -114,6 +117,8 @@ class ListItemView(mixins.ListModelMixin,
     queryset = Item.objects.all()
     serializer_class = ListItemSerializer
     # permission_classes = [IsSeller | IsBuyer]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['status', 'id']
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -122,6 +127,7 @@ class ListItemView(mixins.ListModelMixin,
 class UpdateItemView(mixins.RetrieveModelMixin,
                      mixins.UpdateModelMixin,
                      generics.GenericAPIView):
+    throttle_scope = 'item'
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = [IsSeller]
@@ -163,10 +169,10 @@ class DeleteItemView(generics.RetrieveDestroyAPIView):
 class CreateBidView(mixins.RetrieveModelMixin,
                     mixins.CreateModelMixin,
                     generics.GenericAPIView):
+    throttle_scope = 'bids'
     queryset = Bid.objects.all()
     serializer_class = BidSerializer
     permission_classes = [IsBuyer]
-    throttle_classes = [UserRateThrottle]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -190,6 +196,9 @@ class ListBidHistoryView(mixins.ListModelMixin,
 
 
 class SendEmailView(APIView):
+    """
+    A test api to see if the mail system works.
+    """
 
     def post(self, request):
         email = request.data['to']

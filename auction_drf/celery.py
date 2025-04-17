@@ -25,7 +25,7 @@ app.conf.beat_schedule = {
         'options': {
             # If the email in not send within an hour of that day that task expires
             # to avoid backlog mails getting send with outdated data.
-            'expire_seconds': 3600
+            'expires': 3600
         }
     },
 }

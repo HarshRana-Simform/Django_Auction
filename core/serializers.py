@@ -69,6 +69,8 @@ class ListItemSerializer(serializers.ModelSerializer):
 
     seller = serializers.StringRelatedField()
     winner = serializers.StringRelatedField()
+    start_time = serializers.DateTimeField(format="%B %d, %Y %I:%M %p")
+    end_time = serializers.DateTimeField(format="%B %d, %Y %I:%M %p")
 
     class Meta:
         model = Item
@@ -90,18 +92,18 @@ class BidSerializer(serializers.ModelSerializer):
     def validate(self, data):
         item = data["item"]
 
+        if item.end_time < timezone.now():
+            raise serializers.ValidationError(
+                "The auction has already ended.")
+        if timezone.now() < item.start_time:
+            raise serializers.ValidationError(
+                f"The auction has not started yet: Start date and time:{item.start_time}.")
+        if data["bid_amount"] <= item.current_bid:
+            raise serializers.ValidationError(
+                "Your bid amount must be greater than the current bid.")
         if item.status == 'active':
             return data
         else:
-            if item.end_time < timezone.now():
-                raise serializers.ValidationError(
-                    "The auction has already ended.")
-            if timezone.now() < item.start_time:
-                raise serializers.ValidationError(
-                    f"The auction has not started yet: Start date and time:{item.start_time}.")
-            if data["bid_amount"] <= item.current_bid:
-                raise serializers.ValidationError(
-                    "Your bid amount must be greater than the current bid.")
             raise serializers.ValidationError(
                 "The auction status is closed, bids are only allowed if the status is active."
             )

@@ -5,7 +5,8 @@ import json
 
 
 def auction_dashboard(request):
-    response = requests.get('http://127.0.0.1:8000/core/api/list_items/')
+    response = requests.get(
+        'http://127.0.0.1:8000/core/api/list_items/?ordering=status,id')
     auctions = json.loads(response.text)
     context = {'auctions': auctions}
     return render(request, 'frontend/list_auctions.html', context)

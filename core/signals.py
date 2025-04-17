@@ -3,6 +3,9 @@ from django.dispatch import receiver
 from .tasks import open_auction, close_auction, send_start_mail, send_end_mail
 from .models import Item, Bid
 from datetime import timedelta, datetime
+from django.db import connection
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 
 
 @receiver(post_save, sender=Item)
@@ -14,6 +17,17 @@ def schedule_auction_tasks(sender, instance, created, **kwargs):
 
         instance.current_bid = instance.starting_bid
         instance.save()
+
+        # Broadcast to WebSocket clients
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'auction_dashboard',
+            {
+                'type': 'send_status_update',
+                'item_id': instance.id,
+                'status': str(instance.status),
+            }
+        )
 
         # Scheduling the open task
         delay_open = instance.start_time
@@ -42,5 +56,21 @@ def update_current_bid(sender, instance, created, **kwargs):
     if created:
 
         item = instance.item
-        item.current_bid = instance.bid_amount
-        item.save()
+        # item.current_bid = instance.bid_amount
+        # item.save()
+
+        with connection.cursor() as cursor:
+            print("The stored procedure called.")
+            cursor.execute(
+                "CALL update_current_bid_procedure(%s)", [instance.id])
+
+        # Broadcast to WebSocket clients
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'auction_dashboard',
+            {
+                'type': 'send_auction_update',
+                'item_id': item.id,
+                'current_bid': str(instance.bid_amount),
+            }
+        )

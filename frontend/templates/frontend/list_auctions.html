@@ -18,8 +18,8 @@ Auctions List
               <th scope="col">ID</th>
               <th scope="col">Name</th>
               <th scope="col">Description</th>
-              <th scope="col">Starting bid</th>
-              <th scope="col">Current bid</th>
+              <th scope="col">Starting bid (₹)</th>
+              <th scope="col">Current bid (₹)</th>
               <th scope="col">Start Time</th>
               <th scope="col">End Time</th>
               <th scope="col">Status</th>
@@ -28,7 +28,7 @@ Auctions List
           </thead>
         {% for auction in auctions%}
           <tbody>
-            <tr>
+            <tr id="item-{{auction.id}}">
               <td>{{auction.id}}</td>
 
               <td>
@@ -39,7 +39,7 @@ Auctions List
 
               <td>{{auction.description|truncatewords:5}}</td>
               <td>{{auction.starting_bid}}</td>
-              <td>{{auction.current_bid}}</td>
+              <td class="current-bid">{{auction.current_bid}}</td>
               <td>{{auction.start_time}}</td>
               <td>{{auction.end_time}}</td>
               {% if auction.status == 'closed' %}
@@ -70,4 +70,31 @@ Auctions List
     </div>
   {% endif %}
   </div>
+
+  <script>
+    const socket = new WebSocket('ws://localhost:8000/ws/auctions/');
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        console.log("WebSocket received:", data);
+        if (data.current_bid){
+          const itemId = data.item_id;
+          const currentBid = data.current_bid;
+
+          // Update the table row with the new bid
+          const bidCell = document.querySelector(`#item-${itemId} .current-bid`);
+          if (bidCell) {
+              bidCell.textContent = currentBid;
+          }
+        }
+        else {
+          const itemId = data.item_id;
+          const status = data.status;
+          location.reload();
+        }
+
+    };
+    socket.onopen = () => console.log("WebSocket connected");
+    socket.onerror = (err) => console.error("WebSocket error:", err);
+  </script>
 {% endblock content %}

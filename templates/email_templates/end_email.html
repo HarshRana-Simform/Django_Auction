@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Auction Finished: {{item.name}}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f6f8fa;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 30px auto;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      h1,
+      h2 {
+        color: #333333;
+      }
+      .details {
+        margin-bottom: 30px;
+      }
+      .details p {
+        margin: 8px 0;
+        color: #555555;
+      }
+      .btn {
+        display: inline-block;
+        margin: 10px;
+        padding: 12px 24px;
+        font-size: 16px;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 6px;
+      }
+      .accept {
+        background-color: #28a745;
+      }
+      .decline {
+        background-color: #dc3545;
+      }
+      .footer {
+        text-align: center;
+        font-size: 12px;
+        color: #888888;
+        margin-top: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>FINISHED!</h1>
+        <h2>The Auction has completed for item: {{item.name}}</h2>
+      </div>
+      <div class="details">
+        <p><strong>Description:</strong><br />{{item.description}}</p>
+        {% if item.winner %}
+        <p>Winner: {{item.winner.username}}!!!</p>
+        <p>Winning Bid: ₹{{item.current_bid}}</p>
+        {% else %}
+        <p>No bids where placed.</p>
+        {% endif %}
+      </div>
+      <div class="footer">
+        If you have any questions, feel free to contact the organizers at
+        testexample@gmail.com.
+      </div>
+    </div>
+  </body>
+</html>
