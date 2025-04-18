@@ -1,19 +1,6 @@
 # Django_Auction
 
-testuser : Role : Seller
-{
-    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0NzA3NDY3LCJpYXQiOjE3NDQxMTcwNTEsImp0aSI6Ijg5ZTgwOWIyYTEzMDQ4MzM5MTAwODJmYjJiODU2OWQ2IiwidXNlcl9pZCI6NX0.PC2SvOEpNXNc4Gd6kiCzjbAlJkg4PopelQVz077Fjh4",
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0NTIyNTg2NywiaWF0IjoxNzQ0NjIxMDY3LCJqdGkiOiI2YjRlOWM0YjgwYWI0OWUwYmQ1NWIzM2JjYWFiNTNkNiIsInVzZXJfaWQiOjV9.jhbDgYNIZ014EnwNweRiXPmZvsLgZ--K7PkOl0HeczI"
-}
+A auction system's backend, created in DRF.
 
-testuser2 : Role : Buyer
-{
-    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ0ODY5MzM4LCJpYXQiOjE3NDQ2MjA4MjYsImp0aSI6IjkwN2QzZWIzMjY4OTQ3MmE4MWFkNTA4YjQ1N2NhMjM4IiwidXNlcl9pZCI6Nn0.scCmN9q8gJ6bTKGU_eVd0NM4qpGiN9rb_ongB5PvQ_Q",
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0NTM4NzczOCwiaWF0IjoxNzQ0NzgyOTM4LCJqdGkiOiJmZGM1ZmZlZjAwZTc0M2NkYWNmOTU0NzNhOTc1NzhlYyIsInVzZXJfaWQiOjZ9.dyBVbm10KEKmicYMhtFqKWOuz-B5HjbH2UznhDNnIcM"
-}
-
-harsh : Role : Admin
-{
-"refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0NDM1MDM3NywiaWF0IjoxNzQzNzQ1NTc3LCJqdGkiOiI2ZTExZjI4ZjE5MWQ0ZWJkOTNiNjc3ODI1NzQ5MzNmZiIsInVzZXJfaWQiOjF9.LGtZ8s-TQ70LaO12qYct-ehfOC7JOaZ2CfLdlsdWdoc",
-"access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQzODMxOTc3LCJpYXQiOjE3NDM3NDU1NzcsImp0aSI6IjljZDg1NTY0MzY5ZjRhNDlhZmU0NTkyNzQxNGViZWQwIiwidXNlcl9pZCI6MX0.st0B1atx8WCIM37h5LA2HpTMJVErsY5ZWvfQZbj1omQ"
-}
+Their is a frontend dashboard where user can keep track of the onging and finished auction for items as well as get real-time bidding
+updates of the active auctions.
