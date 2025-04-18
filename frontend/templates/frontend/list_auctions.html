@@ -48,18 +48,6 @@ Auctions List
               <td><p class="btn btn-success"  >{{auction.status|capfirst}}</p></td>
               {% endif %}
 
-
-              {% comment %} <td class="text-center">
-                {% if request.user == blog.author or user|has_group:"moderator" or user.is_staff %}
-                <a href="{% url 'update' blog.id  %}"><button type="button" class="btn btn-info">Update</button></a>
-                <a href="{% url 'delete' blog.id  %}"><button type="button" class="btn btn-danger">Delete</button></a>
-                {% if user.is_staff %}
-                <a href="{% url 'ban_user' blog.author.id %}"><button type="button" class="btn btn-warning">Ban User</button></a>
-                {% endif %}
-                {% else %}
-                Not the Author.
-                {% endif %}
-              </td> {% endcomment %}
             </tr>
         {% endfor %}
         </table>

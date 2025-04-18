@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "allauth",
     "allauth.account",
-    # "allauth.socialaccount",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -51,7 +50,6 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
     "django_celery_beat",
-    # 'dj_rest_auth',
     "core",
     "frontend",
 ]
@@ -178,17 +176,13 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    # Needed to login by username in Django admin, regardless of `allauth`
+    # Needed to login by username in Django admin
     'django.contrib.auth.backends.ModelBackend',
-
-    # `allauth` specific authentication methods, such as login by email
-    # 'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # JWT Settings
 
@@ -202,9 +196,7 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-# Allauth settings for OAuth (if needed)
 SITE_ID = 1
-
 
 # Email Backend
 EMAIL_HOST = 'smtp.gmail.com'
@@ -214,9 +206,6 @@ EMAIL_HOST_USER = os.getenv('TEST_EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('TEST_EMAIL_HOST_PASSWORD')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_AUTHENTICATION_METHOD = "email"
-# ACCOUNT_EMAIL_VERIFICATION = "optional"
 
 # Celery Settings
 

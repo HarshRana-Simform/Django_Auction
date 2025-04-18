@@ -51,7 +51,8 @@ class Item(models.Model):
 
 class Bid(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user_bid')
     item = models.ForeignKey(
         Item, on_delete=models.CASCADE, related_name='bids')
     bid_amount = models.DecimalField(max_digits=10, decimal_places=2)

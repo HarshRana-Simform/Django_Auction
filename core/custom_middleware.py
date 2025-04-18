@@ -3,6 +3,11 @@ from rest_framework import status
 
 
 class MaintenanceModeMiddleware:
+    """
+    A middleware to make put all the api views into maintenance mode.
+
+    Staff Users are allowed to continue operating the apis.
+    """
 
     def __init__(self, get_response):
         self.get_response = get_response
