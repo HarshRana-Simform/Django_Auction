@@ -56,8 +56,6 @@ def update_current_bid(sender, instance, created, **kwargs):
     if created:
 
         item = instance.item
-        # item.current_bid = instance.bid_amount
-        # item.save()
 
         with connection.cursor() as cursor:
             print("The stored procedure called.")

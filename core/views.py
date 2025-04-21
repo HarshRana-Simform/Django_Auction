@@ -50,21 +50,7 @@ class ProtectedView(APIView):
     # permission_classes = [IsSeller]
 
     def get(self, request):
-        # item = Item.objects.get(id=21)
-        # winning_bid = item.bids.order_by('-bid_amount').first()
-        # print(winning_bid)
-        # current_time = timezone.now()
-        # upcoming_auctions = Item.objects.filter(start_time__gte=current_time)
-        # print(upcoming_auctions)
-        # print(self.request.user)
-        # print(request.headers)
-        # user = User.objects.get(id=6)
-
-        # user_bid = user.user_bid.all()
-
-        # print(list(user_bid))
         print(type(self.request.user))
-        # print((item.end_time - item.start_time) - timedelta(minutes=3))
         return Response({"message": "Hello"})
 
 
@@ -93,7 +79,7 @@ class LogoutView(APIView):
             # Getting the refresh token from the request body.
             refresh_token = request.data["refresh"]
             print(refresh_token)
-            # Converting it into a token ojject so that it can be manipulatied by simplejwt package.
+            # Converting it into a token object so that it can be manipulatied by simplejwt package.
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response({"message": "Successfully logged out."}, status=status.HTTP_205_RESET_CONTENT)

@@ -26,7 +26,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create a new user with a hashed password."""
-        validated_data.pop("password2")  # Remove password2 before saving
+
+        # Remove password2 before saving
+        validated_data.pop("password2")
+
         # Uses Django's built-in create_user
         user = User.objects.create_user(**validated_data)
         return user
